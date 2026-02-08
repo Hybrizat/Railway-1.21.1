@@ -181,7 +181,7 @@ public class CRTrackMaterials {
         NARROW_GAUGE_ANDESITE = narrowVariant(TrackMaterial.ANDESITE),
         WIDE_GAUGE_PHANTOM = make(Railways.asResource("phantom_wide"))
             .lang("Wide Phantom")
-            .block(() -> CRBlocks.WIDE_GAUGE_PHANTOM_TRACK)
+            .block(() -> CRBlocks.WIDE_GAUGE_TRACKS.get(getWide(PHANTOM)))
             .particle(ResourceLocation.withDefaultNamespace("block/glass"))
             .noRecipeGen()
             .trackType(CRTrackType.WIDE_GAUGE)
@@ -190,7 +190,7 @@ public class CRTrackMaterials {
             .build(),
         NARROW_GAUGE_PHANTOM = make(Railways.asResource("phantom_narrow"))
             .lang("Narrow Phantom")
-            .block(() -> CRBlocks.NARROW_GAUGE_PHANTOM_TRACK)
+            .block(() -> CRBlocks.NARROW_GAUGE_TRACKS.get(getNarrow(PHANTOM)))
             .particle(ResourceLocation.withDefaultNamespace("block/glass"))
             .noRecipeGen()
             .trackType(CRTrackType.NARROW_GAUGE)

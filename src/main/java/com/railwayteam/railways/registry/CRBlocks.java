@@ -328,8 +328,6 @@ public class CRBlocks {
     public static final BlockEntry<TrackBlock> ENDER_TRACK = makeTrack(CRTrackMaterials.ENDER);
     public static final BlockEntry<TrackBlock> TIELESS_TRACK = makeTrack(CRTrackMaterials.TIELESS);
     public static final BlockEntry<TrackBlock> PHANTOM_TRACK = makeTrack(CRTrackMaterials.PHANTOM);
-    public static final BlockEntry<TrackBlock> WIDE_GAUGE_PHANTOM_TRACK = makeTrack(CRTrackMaterials.WIDE_GAUGE_PHANTOM, WideGaugeTrackBlockStateGenerator.create()::generate);
-    public static final BlockEntry<TrackBlock> NARROW_GAUGE_PHANTOM_TRACK = makeTrack(CRTrackMaterials.NARROW_GAUGE_PHANTOM, NarrowGaugeTrackBlockStateGenerator.create()::generate);
     public static final BlockEntry<TrackBlock> MANGROVE_TRACK = makeTrack(CRTrackMaterials.MANGROVE);
     public static final BlockEntry<TrackBlock> CHERRY_TRACK = makeTrack(CRTrackMaterials.CHERRY);
     public static final BlockEntry<TrackBlock> BAMBOO_TRACK = makeTrack(CRTrackMaterials.BAMBOO);

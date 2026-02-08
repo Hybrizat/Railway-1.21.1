@@ -15,6 +15,8 @@
     "railways:track_ender",
     "railways:track_tieless",
     "railways:track_phantom",
+    "railways:track_phantom_wide",
+    "railways:track_phantom_narrow",
     "railways:track_mangrove",
     "railways:track_cherry",
     "railways:track_bamboo",
