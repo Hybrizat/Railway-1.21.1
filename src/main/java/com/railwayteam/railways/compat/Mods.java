@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public enum Mods {
 	BIOMESOPLENTY("biomesoplenty"),
 	BLUE_SKIES("blue_skies"),
-	BYG("byg"),
+	BYG("biomeswevegone"),
 	HEXCASTING("hexcasting",true),
 	TWILIGHTFOREST("twilightforest"),
 	SODIUM("sodium"),
