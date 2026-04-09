@@ -28,7 +28,7 @@ public class ModsImpl {
     public static boolean isModLoaded(String id, @Nullable String fabricId) {
         List<ModInfo> mods = LoadingModList.get().getMods();
         for (ModInfo mod : mods) {
-            if (mod.getModId().equals(id)) {
+            if (mod.getModId().equals(id) || (fabricId != null && mod.getModId().equals(fabricId))) {
                 return true;
             }
         }
