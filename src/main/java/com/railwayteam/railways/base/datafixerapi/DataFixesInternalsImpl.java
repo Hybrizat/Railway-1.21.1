@@ -28,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
+import java.util.NoSuchElementException;
+
 @ApiStatus.Internal
 public final class DataFixesInternalsImpl extends DataFixesInternals {
     private final @NotNull Schema latestVanillaSchema;
@@ -57,7 +59,32 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
 
     @Override
     public @NotNull Schema createBaseSchema() {
-        return new NamespacedSchema(0, this.latestVanillaSchema);
+        // Validate parent schema before attempting to create a NamespacedSchema.
+        // NamespacedSchema delegates type building to parent, which can throw NoSuchElementException
+        // if the parent schema is missing expected type definitions.
+        if (this.latestVanillaSchema == null) {
+            throw new IllegalStateException(
+                "[Railways DFU] Cannot create base schema: latestVanillaSchema is null. " +
+                "DataFixer may not have been properly initialized by NeoForge."
+            );
+        }
+
+        try {
+            return new NamespacedSchema(0, this.latestVanillaSchema);
+        } catch (NoSuchElementException e) {
+            throw new IllegalStateException(
+                "[Railways DFU] Failed to create base schema: parent Minecraft schema is missing " +
+                "expected type definitions. This may indicate a mod conflict or incomplete DFU initialization. " +
+                "Exception: " + e.getMessage(),
+                e
+            );
+        } catch (Exception e) {
+            throw new IllegalStateException(
+                "[Railways DFU] Unexpected error during base schema creation. " +
+                "This is likely a mod compatibility issue. Exception: " + e.getClass().getSimpleName() + " - " + e.getMessage(),
+                e
+            );
+        }
     }
 
     @Override
