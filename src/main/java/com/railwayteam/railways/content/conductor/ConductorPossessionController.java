@@ -317,9 +317,13 @@ public class ConductorPossessionController {
         if (player.level().isClientSide)
             return ClientHandler.isPlayerMountedOnCamera();
         else {
-            // Use our custom possession tracking instead of vanilla camera field (which gets reset)
             ConductorEntity possessed = ((ServerPlayerPossessionAccess) player).railways$getPossessedConductor();
-            return possessed != null;
+            if (possessed == null) return false;
+            if (possessed.isRemoved() || !possessed.isAlive()) {
+                ((ServerPlayerPossessionAccess) player).railways$setPossessedConductor(null);
+                return false;
+            }
+            return true;
         }
     }
 
@@ -331,8 +335,13 @@ public class ConductorPossessionController {
         if (player.level().isClientSide)
             return ClientHandler.getPlayerMountedOnCamera();
         else {
-            // Use our custom possession tracking instead of vanilla camera field (which gets reset)
-            return ((ServerPlayerPossessionAccess) player).railways$getPossessedConductor();
+            ConductorEntity possessed = ((ServerPlayerPossessionAccess) player).railways$getPossessedConductor();
+            if (possessed == null) return null;
+            if (possessed.isRemoved() || !possessed.isAlive()) {
+                ((ServerPlayerPossessionAccess) player).railways$setPossessedConductor(null);
+                return null;
+            }
+            return possessed;
         }
     }
 

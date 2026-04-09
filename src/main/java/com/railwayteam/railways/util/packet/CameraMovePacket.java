@@ -21,6 +21,7 @@ package com.railwayteam.railways.util.packet;
 import com.google.common.primitives.Floats;
 import com.railwayteam.railways.Railways;
 import com.railwayteam.railways.content.conductor.ConductorEntity;
+import com.railwayteam.railways.content.conductor.ConductorPossessionController;
 import com.railwayteam.railways.multiloader.C2SPacket;
 import com.railwayteam.railways.multiloader.S2CPacket;
 import com.railwayteam.railways.registry.CRPackets;
@@ -165,7 +166,9 @@ public class CameraMovePacket implements C2SPacket, S2CPacket {
 
     @Override
     public void handle(ServerPlayer sender1) {
-        if (sender1.level().getEntity(id) instanceof ConductorEntity conductor && sender1.getCamera() == conductor) {
+        if (sender1.level().getEntity(id) instanceof ConductorEntity conductor
+                && ConductorPossessionController.isPossessingConductor(sender1)
+                && ConductorPossessionController.getPossessingConductor(sender1) == conductor) {
             if (containsInvalidValues(move.getX(0.0), move.getY(0.0), move.getZ(0.0), move.getYRot(0.0f), move.getXRot(0.0f))) {
                 sender1.connection.disconnect(Component.translatable("multiplayer.disconnect.invalid_player_movement"));
                 return;

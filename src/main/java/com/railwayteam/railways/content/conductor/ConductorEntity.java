@@ -622,6 +622,21 @@ public class ConductorEntity extends AbstractGolem {
     return this.level().isClientSide && isPossessed();
   }
 
+  @Override
+  protected void customServerAiStep() {
+    if (isPossessed()) return;
+    super.customServerAiStep();
+  }
+
+  @Override
+  public void travel(@NotNull Vec3 travelVector) {
+    if (!level().isClientSide && isPossessed()) {
+      this.setDeltaMovement(Vec3.ZERO);
+      return;
+    }
+    super.travel(travelVector);
+  }
+
   // only used by MouseHandler
   public void turnView(double yRot, double xRot) {
     float f = (float)xRot * 0.15f;
@@ -887,6 +902,10 @@ public class ConductorEntity extends AbstractGolem {
 
   @Override
   public void remove(@NotNull RemovalReason reason) {
+    if (!level().isClientSide) {
+      ServerPlayer viewer = currentlyViewing.get();
+      if (viewer != null) stopViewing(viewer);
+    }
     super.remove(reason);
     WITH_TOOLBOXES.get(this.level()).remove(this);
   }
@@ -1179,6 +1198,10 @@ public class ConductorEntity extends AbstractGolem {
 
   @Override
   public void die(@NotNull DamageSource pSource) {
+    if (!level().isClientSide) {
+      ServerPlayer viewer = currentlyViewing.get();
+      if (viewer != null) stopViewing(viewer);
+    }
     super.die(pSource);
     Job job = getJob();
     ItemStack holdingStack = this.unequipToolbox();

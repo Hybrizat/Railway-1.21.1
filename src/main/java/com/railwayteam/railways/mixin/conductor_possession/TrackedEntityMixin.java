@@ -37,7 +37,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 /**
  * Lets entities get sent to the client even though they're not in range of the player
  *
- * Confirmed working with Security Craft
  */
 @Mixin(targets = "net.minecraft.server.level.ChunkMap$TrackedEntity", priority = 1200)
 public abstract class TrackedEntityMixin {

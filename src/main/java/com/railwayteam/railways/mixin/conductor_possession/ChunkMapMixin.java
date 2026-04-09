@@ -37,7 +37,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * This mixin makes sure that chunks near cameras are properly sent to the player viewing it, as well as fixing block updates
  * not getting sent to chunks loaded by cameras
  *
- * Confirmed compatible with SecurityCraft
  */
 // Disabled for 1.21.1: Original mixin shadowed a removed method signature (updateChunkTracking with parameters).
 // Keeping a placeholder class (not annotated with @Mixin) to retain history; safe to delete later.

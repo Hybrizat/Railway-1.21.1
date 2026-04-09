@@ -33,8 +33,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Makes sure the server does not move the player viewing a camera to the camera's position
  *
- * Confirmed compatible with SecurityCraft
- *
  * Updated for 1.21.1: In 1.21.1, the tick() method calls entity.isAlive() on the camera without
  * a null check. We need to ensure the camera is never null, so instead of canceling setCamera
  * entirely, we let it proceed but intercept absMoveTo to prevent position sync.
@@ -57,45 +55,33 @@ public abstract class ServerPlayerMixin implements ServerPlayerPossessionAccess 
 		this.railways$possessedConductor = conductor;
 	}
 
-	/**
-	 * Redirect the isAlive() call on the camera entity to return false if the camera is null
-	 * or if we're possessing a conductor. This prevents the absMoveTo from being called at all.
-	 * 
-	 * In 1.21.1, vanilla code structure is:
-	 *   Entity entity = this.getCamera();
-	 *   if (entity != this && entity.isAlive()) {
-	 *       this.absMoveTo(...);
-	 *   }
-	 */
 	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isAlive()Z"), require = 0)
-	private boolean railways$redirectIsAlive(Entity entity) {
-		if (entity == null) {
-			return false;
-		}
-		// If possessing a conductor or viewing a SecurityCraft camera, return false to skip the absMoveTo
-		if (ConductorPossessionController.isPossessingConductor((ServerPlayer)(Object)this)) {
-			return false;
-		}
-		if (entity.getClass().getName().equals("net.geforcemods.securitycraft.entity.camera.SecurityCamera")) {
-			return false;
-		}
+	private boolean railways$nullGuardIsAlive(Entity entity) {
+		if (entity == null) return false;
 		return entity.isAlive();
 	}
 
-	/**
-	 * Prevent setting camera to ConductorEntity through normal means,
-	 * AND prevent resetting camera away from ConductorEntity (e.g., when vanilla thinks it's "dead").
-	 * We handle the direct field access via ServerPlayerAccessor.
-	 */
+	@com.llamalad7.mixinextras.injector.v2.WrapWithCondition(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;absMoveTo(DDDFF)V"), require = 0)
+	private boolean railways$shouldAbsMoveTo(ServerPlayer player, double x, double y, double z, float yaw, float pitch) {
+		return !ConductorPossessionController.isPossessingConductor(player);
+	}
+
 	@Inject(method = "setCamera", at = @At("HEAD"), cancellable = true)
 	private void railways$railways$setCamera(Entity entityToSpectate, CallbackInfo ci) {
+		ServerPlayer self = (ServerPlayer)(Object) this;
 		Entity currentCamera = this.getCamera();
-		// Prevent resetting camera FROM conductor TO something else (vanilla tick thinks conductor is "dead")
-		if (currentCamera instanceof ConductorEntity && !(entityToSpectate instanceof ConductorEntity)) {
+
+		if (entityToSpectate instanceof ConductorEntity) {
 			ci.cancel();
 			return;
 		}
-		// Prevent setting camera TO conductor through normal setCamera (we use accessor instead)
-		if (entityToSpectate instanceof ConductorEntity) ci.cancel();
+
+		if (currentCamera instanceof ConductorEntity conductor) {
+			if (entityToSpectate == self) {
+				ci.cancel();
+			} else {
+				conductor.stopViewing(self);
+			}
+		}
 	}
 }
