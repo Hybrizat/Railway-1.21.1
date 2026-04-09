@@ -1,5 +1,10 @@
 {
+  "replace": false,
   "values": [
+    {
+      "id": "#c:nuggets/zinc",
+      "required": false
+    },
     "create:zinc_nugget"
   ]
 }

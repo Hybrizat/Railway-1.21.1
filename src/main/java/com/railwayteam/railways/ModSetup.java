@@ -64,14 +64,6 @@ public class ModSetup {
 
   // Compat (tracks) - ensure Tracks tab is active for compat track registrations
   useTracksTab();
-    HexCastingTrackCompat.register();
-    BygTrackCompat.register();
-    BlueSkiesTrackCompat.register();
-    TwilightForestTrackCompat.register();
     BiomesOPlentyTrackCompat.register();
-    NaturesSpiritTrackCompat.register();
-    DreamsAndDesiresTrackCompat.register();
-    QuarkTrackCompat.register();
-    TFCTrackCompat.register();
   }
 }
