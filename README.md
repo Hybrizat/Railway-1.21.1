@@ -12,8 +12,10 @@ This repository is an unofficial port of **Create Steam 'n' Rails** for **Neofor
 ### Downloads
 
 <div align="center">
-  
-![CurseForge Downloads](https://img.shields.io/curseforge/dt/1414670?label=CurseForge%20Downloads&labelColor=%23ebebeb&color=%23eb622b) ![Modrinth Downloads](https://img.shields.io/modrinth/dt/L3Jv0QZI?label=Modrinth%20Downloads&labelColor=%23ebebeb&color=%2300af5c)
+
+![CurseForge Downloads](https://img.shields.io/curseforge/dt/1414670?logo=curseforge&logoColor=%23F16436&label=%20&color=%23333333)
+![Modrinth Downloads](https://img.shields.io/modrinth/dt/L3Jv0QZI?logo=modrinth&logoColor=%2300AF5C&label=%20&color=%23dadde1)
+
 </div>
 
 >[!Important]
