@@ -19,6 +19,7 @@ package com.railwayteam.railways.base.datafixerapi;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
+import com.railwayteam.railways.Railways;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -59,31 +60,11 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
 
     @Override
     public @NotNull Schema createBaseSchema() {
-        // Validate parent schema before attempting to create a NamespacedSchema.
-        // NamespacedSchema delegates type building to parent, which can throw NoSuchElementException
-        // if the parent schema is missing expected type definitions.
-        if (this.latestVanillaSchema == null) {
-            throw new IllegalStateException(
-                "[Railways DFU] Cannot create base schema: latestVanillaSchema is null. " +
-                "DataFixer may not have been properly initialized by NeoForge."
-            );
-        }
-
         try {
             return new NamespacedSchema(0, this.latestVanillaSchema);
         } catch (NoSuchElementException e) {
-            throw new IllegalStateException(
-                "[Railways DFU] Failed to create base schema: parent Minecraft schema is missing " +
-                "expected type definitions. This may indicate a mod conflict or incomplete DFU initialization. " +
-                "Exception: " + e.getMessage(),
-                e
-            );
-        } catch (Exception e) {
-            throw new IllegalStateException(
-                "[Railways DFU] Unexpected error during base schema creation. " +
-                "This is likely a mod compatibility issue. Exception: " + e.getClass().getSimpleName() + " - " + e.getMessage(),
-                e
-            );
+            Railways.LOGGER.warn("[Railways DFU] Failed to create base schema, falling back to no-op", e);
+            return new Schema(0, null);
         }
     }
 
