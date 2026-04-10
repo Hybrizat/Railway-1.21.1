@@ -19,6 +19,7 @@ package com.railwayteam.railways.base.datafixerapi;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
+import com.railwayteam.railways.Railways;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -27,6 +28,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
+
+import java.util.NoSuchElementException;
 
 @ApiStatus.Internal
 public final class DataFixesInternalsImpl extends DataFixesInternals {
@@ -57,7 +60,12 @@ public final class DataFixesInternalsImpl extends DataFixesInternals {
 
     @Override
     public @NotNull Schema createBaseSchema() {
-        return new NamespacedSchema(0, this.latestVanillaSchema);
+        try {
+            return new NamespacedSchema(0, this.latestVanillaSchema);
+        } catch (NoSuchElementException e) {
+            Railways.LOGGER.warn("[Railways DFU] Failed to create base schema, falling back to no-op", e);
+            return new Schema(0, null);
+        }
     }
 
     @Override
