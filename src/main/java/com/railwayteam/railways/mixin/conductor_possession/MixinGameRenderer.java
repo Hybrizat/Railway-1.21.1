@@ -63,9 +63,6 @@ public abstract class MixinGameRenderer {
 
     @Inject(method = "checkEntityPostEffect", at = @At("RETURN"))
     private void railways$checkEntityPostEffect(Entity entity, CallbackInfo ci) {
-        if (entity instanceof ConductorEntity && CRConfigs.client().useConductorSpyShader.get()) {
-            loadEffect(ResourceLocation.withDefaultNamespace("shaders/post/scan_pincushion.json"));
-        }
     }
 
     @Inject(method = "shouldRenderBlockOutline", at = @At("HEAD"), cancellable = true)

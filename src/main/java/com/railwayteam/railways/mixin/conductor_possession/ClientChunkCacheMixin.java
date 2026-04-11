@@ -42,7 +42,6 @@ import java.util.function.Consumer;
  * These mixins aim at implementing the camera chunk storage from CameraController into all the places
  * ClientChunkCache#storage is used
  *
- * Confirmed working with Security Craft
  */
 @Mixin(value = ClientChunkCache.class, priority = 1200)
 public abstract class ClientChunkCacheMixin {
