@@ -7,7 +7,7 @@ license = "LGPL-3.0 license"
 modId = "railways"
 version = "${version}"
 displayName = "Create: Steam 'n' Rails 1.21.1"
-authors = "PoppyBlossom, Chameleon538"
+authors = "PoppyBlossom, Chameleon538, gblfxt"
 description = '''Unofficial port of Create: Steam 'n' Rails to 1.21.1.
 
 This mod bring all of the features from Steam 'n' Rails to a newer Minecraft version!
