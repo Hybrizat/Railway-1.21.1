@@ -179,31 +179,23 @@ public class RedstoneLinkInstruction extends ScheduleInstruction {
     protected void readAdditional(HolderLookup.Provider registries, CompoundTag tag) {
         super.readAdditional(registries, tag);
 
-         // Prefer reading directly from tag (written by writeAdditional).
-        // Fall back to the nested Data sub-tag for compatibility with older saves.
-        ListTag list = null;
         if (tag.contains("Frequency", Tag.TAG_LIST)) {
-            list = tag.getList("Frequency", Tag.TAG_COMPOUND);
-        } else if (tag.contains("Data", Tag.TAG_COMPOUND)) {
-            CompoundTag dataTag = tag.getCompound("Data");
-            if (dataTag.contains("Frequency", Tag.TAG_LIST)) {
-                list = dataTag.getList("Frequency", Tag.TAG_COMPOUND);
+            ListTag list = tag.getList("Frequency", Tag.TAG_COMPOUND);
+            if (list.size() >= 2) {
+                ItemStack first = ItemStack.parseOptional(registries, list.getCompound(0));
+                ItemStack second = ItemStack.parseOptional(registries, list.getCompound(1));
+                freq = Couple.create(
+                    RedstoneLinkNetworkHandler.Frequency.of(first),
+                    RedstoneLinkNetworkHandler.Frequency.of(second)
+                );
+                return;
             }
         }
 
-        if (list != null && list.size() >= 2) {
-            ItemStack first = ItemStack.parseOptional(registries, list.getCompound(0));
-            ItemStack second = ItemStack.parseOptional(registries, list.getCompound(1));
-            freq = Couple.create(
-                RedstoneLinkNetworkHandler.Frequency.of(first),
-                RedstoneLinkNetworkHandler.Frequency.of(second)
-            );
-        } else {
-            freq = Couple.create(
-                RedstoneLinkNetworkHandler.Frequency.EMPTY,
-                RedstoneLinkNetworkHandler.Frequency.EMPTY
-            );
-        }
+        freq = Couple.create(
+            RedstoneLinkNetworkHandler.Frequency.EMPTY,
+            RedstoneLinkNetworkHandler.Frequency.EMPTY
+        );
     }
 
     @Override
